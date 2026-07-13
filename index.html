@@ -225,7 +225,32 @@
     position:absolute; width:78%; aspect-ratio:1;
     background:radial-gradient(circle, rgba(234,106,44,0.35), transparent 70%);
     filter:blur(6px);
-  
+  .pack-card {
+    position: relative;
+    width: 100%;
+    max-width: 500px; /* Batasin biar nggak terlalu lebar di laptop */
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    filter: drop-shadow(0 35px 45px rgba(38,67,44,0.35));
+  }
+
+  /* Ini CSS buat kasih tau browser: "Kalau dibuka di HP, kecilin gambarnya!" */
+  @media (max-width: 600px) {
+    .pack-card {
+      transform: scale(1.0); /* Di HP, ukurannya normal aja (100%) */
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  /* Ini buat di laptop, kita zoom dikit biar tetep megah */
+  @media (min-width: 601px) {
+    .pack-card {
+      transform: scale(1.3); /* Zoom 130% khusus buat layar gede */
+    }
+  }
 
   }
   .pack-card svg{ width:100%; height:auto; }
