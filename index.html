@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barenergy — Alami, Bernutrisi, Berenergi</title>
+<meta name="description" content="Barenergy: camilan padat energi dari bahan endemik dataran tinggi Banjarnegara. Hitung kebutuhan energimu, telusuri jejak dampak sosial, dan racik rasa barumu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#EAF3E2;
+    --bg-alt:#DEEAD3;
+    --bg-alt-2:#F4F8EE;
+    --surface:rgba(255,255,255,0.42);
+    --surface-strong:rgba(255,255,255,0.62);
+    --surface-border:rgba(255,255,255,0.65);
+    --ink:#23301F;
+    --ink-soft:#52654A;
+    --ink-faint:#7C8C74;
+    --forest:#3B6B44;
+    --forest-deep:#26432C;
+    --orange:#EA6A2C;
+    --orange-deep:#C94E14;
+    --violet:#7A5C6E;
+    --line:rgba(35,48,31,0.14);
+    --shadow-sm:0 2px 10px rgba(38,67,44,0.08);
+    --shadow-md:0 14px 34px rgba(38,67,44,0.14);
+    --shadow-lg:0 24px 60px rgba(38,67,44,0.20);
+    --radius-lg:28px;
+    --radius-md:18px;
+    --radius-sm:10px;
+    --font-display:'Fraunces', serif;
+    --font-body:'Plus Jakarta Sans', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+    --nav-h:76px;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{ display:block; max-width:100%; }
+  a{ color:inherit; }
+  section{ scroll-margin-top:calc(var(--nav-h) + 14px); }
+  h1,h2,h3{ font-family:var(--font-display); color:var(--forest-deep); margin:0; font-weight:600; }
+  p{ margin:0; }
+  ul{ margin:0; padding:0; list-style:none; }
+  button{ font-family:inherit; cursor:pointer; }
+  input,select,textarea{ font-family:inherit; }
+
+  :focus-visible{
+    outline:3px solid var(--orange-deep);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .wrap{ max-width:1160px; margin:0 auto; padding-inline:1.5rem; }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--forest);
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:0.5em;
+  }
+  .eyebrow::before{
+    content:'';
+    width:7px; height:7px;
+    background:var(--orange);
+    border-radius:50%;
+    display:inline-block;
+  }
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.5em;
+    font-family: var(--font-display); /* Ini yang diubah biar font-nya serif/premium */
+    font-weight:700;
+    font-size: 1.1rem; /* Ukuran font dibesarkan sedikit */
+    padding:0.9em 1.6em;
+    border-radius:999px;
+    border:2px solid transparent;
+    transition:transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:var(--orange);
+    color:var(--forest-deep);
+    box-shadow:var(--shadow-sm);
+  }
+  .btn-primary:hover{ background:#F17A3C; transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .btn-ghost{
+    background:var(--surface);
+    border-color:var(--surface-border);
+    color:var(--forest-deep);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+  .btn-ghost:hover{ transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+  .btn-block{ width:100%; }
+  .btn:disabled{ opacity:0.55; cursor:not-allowed; transform:none !important; }
+
+  /* ============ NAVBAR ============ */
+  .navbar{
+    position:sticky; top:0; z-index:50;
+    height:var(--nav-h);
+    display:flex; align-items:center;
+    background:var(--surface);
+    backdrop-filter:blur(16px) saturate(140%);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);
+    border-bottom:1px solid var(--surface-border);
+  }
+  .navbar .wrap{ display:flex; align-items:center; justify-content:space-between; width:100%; }
+  .logo{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.5rem;
+    color:var(--forest-deep);
+    letter-spacing:-0.01em;
+    display:flex; align-items:baseline; gap:0.35em;
+  }
+  .logo span{
+    font-family:var(--font-mono);
+    font-size:0.6rem;
+    color:var(--orange-deep);
+    font-weight:600;
+    letter-spacing:0.08em;
+  }
+  .nav-links{ display:flex; align-items:center; gap:2rem; }
+  .nav-links a{
+    font-weight:600; font-size:0.92rem; text-decoration:none;
+    color:var(--ink-soft);
+    position:relative;
+    padding-block:0.3em;
+  }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; height:2px; width:0;
+    background:var(--orange-deep); transition:width 0.2s ease;
+  }
+  .nav-links a:hover::after, .nav-links a:focus-visible::after{ width:100%; }
+  .nav-cta{ display:flex; align-items:center; gap:1rem; }
+  .burger{
+    display:none;
+    width:42px; height:42px;
+    border:none; background:var(--surface); border-radius:50%;
+    align-items:center; justify-content:center;
+  }
+  .burger span, .burger span::before, .burger span::after{
+    content:''; display:block; width:18px; height:2px; background:var(--forest-deep);
+    position:relative; transition:transform 0.2s ease, opacity 0.2s ease;
+  }
+  .burger span::before{ position:absolute; top:-6px; }
+  .burger span::after{ position:absolute; top:6px; }
+  .burger[aria-expanded="true"] span{ background:transparent; }
+  .burger[aria-expanded="true"] span::before{ transform:translateY(6px) rotate(45deg); }
+  .burger[aria-expanded="true"] span::after{ transform:translateY(-6px) rotate(-45deg); }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    padding-top:clamp(2.5rem, 5vw, 4.5rem);
+    padding-bottom:0;
+  }
+  .hero-ridge{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+  }
+  .hero .wrap{ position:relative; z-index:1; }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:2.5rem;
+    align-items:center;
+    padding-bottom:3rem;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 5vw, 3.6rem);
+    line-height:1.05;
+    letter-spacing:-0.015em;
+    margin-block:0.5em 0.45em;
+  }
+  .hero-sub{
+    color:var(--ink-soft);
+    font-size:1.08rem;
+    max-width:34ch;
+    margin-bottom:1.8rem;
+  }
+  .hero-actions{ display:flex; gap:0.9rem; flex-wrap:wrap; margin-bottom:1.8rem; }
+  .hero-tags{ display:flex; gap:0.6rem; flex-wrap:wrap; }
+  .tag{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.02em;
+    background:var(--surface-strong);
+    border:1px solid var(--surface-border);
+    color:var(--forest-deep);
+    padding:0.4em 0.8em;
+    border-radius:999px;
+  }
+
+  /* packaging illustration */
+  .pack-stage{
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    padding:2rem;
+  }
+  .pack-glow{
+    position:absolute; width:78%; aspect-ratio:1;
+    background:radial-gradient(circle, rgba(234,106,44,0.35), transparent 70%);
+    filter:blur(6px);
+  
+  }
+  .pack-card{
+    position:relative;
+    width: 100%; 
+    min-width: 450px; 
+    transform: scale(1.4) translateX(-5%); 
+    transform-origin: center; 
+    filter:drop-shadow(0 35px 45px rgba(38,67,44,0.35)); 
+    justify-content: center;
+    z-index: 10; 
+  }
+  .pack-card svg{ width:100%; height:auto; }
+
+  /* trail ridge divider — signature element */
+  .trail{
+    position:relative;
+    padding-block:1.4rem;
+    background:var(--bg-alt);
+  }
+  .trail::before{
+    content:'';
+    position:absolute; left:0; right:0; top:50%;
+    border-top:2px dashed rgba(59,107,68,0.35);
+  }
+  .trail .wrap{
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .trail-badge{
+    position:relative; z-index:1;
+    display:flex; align-items:center; gap:0.6rem;
+    background:var(--forest-deep);
+    color:var(--bg-alt-2);
+    padding:0.55em 1.3em;
+    border-radius:999px;
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    box-shadow:var(--shadow-sm);
+  }
+  .trail-badge svg{ width:16px; height:16px; }
+
+  /* ============ SECTIONS GENERIC ============ */
+  .section{ padding-block:5rem; }
+  .section-alt{ background:var(--bg-alt); }
+  .section-head{ max-width:640px; margin-bottom:3rem; }
+  .section-head h2{
+    font-size:clamp(1.9rem, 3.2vw, 2.6rem);
+    margin-top:0.5em;
+    letter-spacing:-0.01em;
+  }
+  .section-head p{ color:var(--ink-soft); margin-top:0.9rem; font-size:1.02rem; }
+
+  /* ============ INGREDIENT GRID ============ */
+  .ingredients{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1.4rem;
+  }
+  .ing-card{
+    background:var(--surface);
+    border:1px solid var(--surface-border);
+    backdrop-filter:blur(14px) saturate(130%);
+    -webkit-backdrop-filter:blur(14px) saturate(130%);
+    border-radius:var(--radius-lg);
+    padding:1.8rem;
+    box-shadow:var(--shadow-sm);
+    transition:transform 0.28s ease, box-shadow 0.28s ease;
+    opacity:0;
+    transform:translateY(18px);
+  }
+  .ing-card.in-view{ opacity:1; transform:translateY(0); transition:transform 0.6s ease, box-shadow 0.28s ease, opacity 0.6s ease; }
+  .ing-card:hover{ transform:translateY(-8px); box-shadow:var(--shadow-lg); }
+  .ing-icon{
+    width:52px; height:52px;
+    color:var(--forest);
+    margin-bottom:1.1rem;
+  }
+  .ing-card h3{ font-size:1.15rem; margin-bottom:0.5rem; }
+  .ing-card p{ color:var(--ink-soft); font-size:0.92rem; }
+  .ing-tag{
+    display:inline-block; margin-top:0.9rem;
+    font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.06em;
+    color:var(--violet); text-transform:uppercase;
+  }
+
+  /* ============ CALCULATOR ============ */
+  .calc-layout{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:2.5rem;
+    align-items:start;
+  }
+  .calc-card{
+    background:var(--surface);
+    border:1px solid var(--surface-border);
+    backdrop-filter:blur(14px) saturate(130%);
+    -webkit-backdrop-filter:blur(14px) saturate(130%);
+    border-radius:var(--radius-lg);
+    padding:2.2rem;
+    box-shadow:var(--shadow-md);
+  }
+  .field{ margin-bottom:1.3rem; }
+  .field label{
+    display:block; font-size:0.82rem; font-weight:700;
+    color:var(--forest-deep); margin-bottom:0.5rem;
+  }
+  .field input, .field select{
+    width:100%;
+    padding:0.85em 1em;
+    border-radius:var(--radius-sm);
+    border:1.5px solid rgba(59,107,68,0.25);
+    background:rgba(255,255,255,0.7);
+    color:var(--ink);
+    font-size:0.98rem;
+  }
+  .field input:focus, .field select:focus{
+    border-color:var(--forest);
+    outline:none;
+  }
+  .field-hint{ font-size:0.78rem; color:var(--ink-faint); margin-top:0.35rem; }
+  .field-error{
+    font-size:0.8rem; color:var(--orange-deep); margin-top:0.4rem;
+    font-weight:600; display:none;
+  }
+  .field-error.show{ display:block; }
+
+  .calc-result{
+    background:var(--forest-deep);
+    color:var(--bg-alt-2);
+    border-radius:var(--radius-lg);
+    padding:2.2rem;
+    min-height:100%;
+    position:relative;
+    overflow:hidden;
+    box-shadow:var(--shadow-md);
+  }
+  .calc-result::before{
+    content:'';
+    position:absolute; right:-40px; top:-40px;
+    width:180px; height:180px; border-radius:50%;
+    background:radial-gradient(circle, rgba(234,106,44,0.35), transparent 70%);
+  }
+  .calc-result .eyebrow{ color:#BFE0C8; }
+  .calc-result .eyebrow::before{ background:var(--orange); }
+  .result-headline{
+    font-family:var(--font-display);
+    font-size:clamp(2.1rem, 4vw, 2.9rem);
+    margin-block:0.6rem 0.3rem;
+    position:relative; z-index:1;
+  }
+  .result-headline .num{ color:#FDBE94; }
+  .result-sub{ color:#CFE3D4; font-size:0.95rem; position:relative; z-index:1; }
+  .result-meta{
+    display:flex; gap:1.6rem; margin-top:1.6rem;
+    font-family:var(--font-mono); font-size:0.8rem; color:#BFE0C8;
+    position:relative; z-index:1; flex-wrap:wrap;
+  }
+  .result-meta b{ display:block; color:#fff; font-size:1.05rem; font-family:var(--font-body); }
+  .result-empty{ color:#BFE0C8; font-size:0.95rem; position:relative; z-index:1; }
+
+  /* ============ JEJAK DAMPAK / QR TRACKER ============ */
+  .impact-check{
+    display:flex; gap:0.7rem; flex-wrap:wrap;
+    margin-bottom:1.4rem;
+  }
+  .impact-check input{
+    flex:1; min-width:180px;
+    padding:0.8em 1.1em;
+    border-radius:999px;
+    border:1.5px solid rgba(59,107,68,0.28);
+    background:rgba(255,255,255,0.75);
+    font-family:var(--font-mono); letter-spacing:0.04em;
+  }
+  .impact-hint{ font-size:0.82rem; color:var(--ink-faint); }
+  .impact-hint code{
+    background:var(--surface-strong); padding:0.1em 0.45em; border-radius:6px;
+    font-family:var(--font-mono);
+  }
+
+  .impact-panel{
+    margin-top:1.8rem;
+    background:var(--surface);
+    border:1px solid var(--surface-border);
+    backdrop-filter:blur(14px) saturate(130%);
+    -webkit-backdrop-filter:blur(14px) saturate(130%);
+    border-radius:var(--radius-lg);
+    padding:2.2rem;
+    box-shadow:var(--shadow-md);
+    display:none;
+    opacity:0; transform:translateY(14px) rotate(-0.4deg);
+  }
+  .impact-panel.show{
+    display:block;
+    animation:stampIn 0.5s ease forwards;
+  }
+  @keyframes stampIn{
+    to{ opacity:1; transform:translateY(0) rotate(0deg); }
+  }
+  .stamp-row{ display:flex; align-items:center; gap:0.9rem; margin-bottom:1.2rem; }
+  .stamp-badge{
+    width:52px; height:52px; border-radius:50%;
+    border:2.5px solid var(--forest);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--forest); flex-shrink:0;
+    transform:rotate(-8deg);
+  }
+  .stamp-badge svg{ width:26px; height:26px; }
+  .stamp-title{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.1em; color:var(--forest); text-transform:uppercase; }
+  .stamp-code{ font-family:var(--font-display); font-size:1.5rem; color:var(--forest-deep); }
+  .impact-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; margin-top:1.3rem; }
+  .impact-stat{ background:var(--surface-strong); border-radius:var(--radius-sm); padding:1rem 1.1rem; }
+  .impact-stat b{ display:block; font-family:var(--font-display); font-size:1.3rem; color:var(--forest-deep); }
+  .impact-stat span{ font-size:0.78rem; color:var(--ink-soft); }
+  .impact-story{ margin-top:1.2rem; color:var(--ink-soft); font-size:0.95rem; line-height:1.6; }
+  .impact-unknown{ font-size:0.85rem; color:var(--orange-deep); font-weight:600; margin-bottom:0.6rem; }
+
+  /* ============ COCREATION + BELI ============ */
+  .puncak-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:2.5rem;
+    align-items:stretch;
+  }
+  .puncak-card{
+    background:var(--surface);
+    border:1px solid var(--surface-border);
+    backdrop-filter:blur(14px) saturate(130%);
+    -webkit-backdrop-filter:blur(14px) saturate(130%);
+    border-radius:var(--radius-lg);
+    padding:2.2rem;
+    box-shadow:var(--shadow-md);
+    display:flex; flex-direction:column;
+  }
+  .buy-list{ display:flex; flex-direction:column; gap:0.8rem; margin-top:1.4rem; }
+  .buy-item{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.9em 1.2em;
+    background:var(--surface-strong);
+    border-radius:var(--radius-sm);
+    text-decoration:none;
+    font-weight:700; color:var(--forest-deep);
+    transition:transform 0.2s ease;
+  }
+  .buy-item:hover{ transform:translateX(4px); }
+  .buy-item small{ display:block; font-weight:500; color:var(--ink-soft); font-size:0.78rem; margin-top:0.15em; }
+  .form-success{
+    display:none;
+    background:var(--forest-deep); color:#fff;
+    padding:1.1em 1.3em; border-radius:var(--radius-sm);
+    font-size:0.92rem; margin-top:1rem;
+  }
+  .form-success.show{ display:block; }
+  textarea{
+    width:100%; padding:0.85em 1em; border-radius:var(--radius-sm);
+    border:1.5px solid rgba(59,107,68,0.25); background:rgba(255,255,255,0.7);
+    resize:vertical; min-height:90px; font-size:0.98rem;
+  }
+  textarea:focus{ border-color:var(--forest); outline:none; }
+
+  /* ============ FOOTER ============ */
+  footer{ background:var(--forest-deep); color:#CFE3D4; padding-block:3rem 2rem; }
+  .footer-grid{ display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:2rem; }
+  .footer-logo{ font-family:var(--font-display); font-size:1.4rem; color:#fff; }
+  .footer-note{ font-size:0.85rem; color:#9DC0A6; max-width:32ch; margin-top:0.6rem; }
+  .footer-meta{ font-family:var(--font-mono); font-size:0.75rem; color:#9DC0A6; text-align:right; }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 880px){
+    .nav-links{
+      position:fixed; top:var(--nav-h); left:0; right:0;
+      flex-direction:column; align-items:flex-start;
+      background:var(--bg-alt-2); padding:1.5rem;
+      border-bottom:1px solid var(--surface-border);
+      transform:translateY(-120%); opacity:0;
+      transition:transform 0.25s ease, opacity 0.25s ease;
+      gap:1.1rem;
+    }
+    .nav-links.open{ transform:translateY(0); opacity:1; }
+    .burger{ display:flex; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .pack-stage{ order:-1; }
+    .ingredients{ grid-template-columns:repeat(2, 1fr); }
+    .calc-layout{ grid-template-columns:1fr; }
+    .impact-grid{ grid-template-columns:1fr 1fr; }
+    .puncak-grid{ grid-template-columns:1fr; }
+    .footer-grid{ flex-direction:column; }
+    .footer-meta{ text-align:left; }
+  }
+  @media (max-width: 540px){
+    .ingredients{ grid-template-columns:1fr; }
+    .impact-grid{ grid-template-columns:1fr; }
+    .section{ padding-block:3.5rem; }
+    .hero-actions{ flex-direction:column; align-items:stretch; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:0.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.001ms !important;
+      scroll-behavior:auto !important;
+    }
+    .ing-card{ opacity:1 !important; transform:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar">
+  <div class="wrap">
+    <div class="logo">barenergy<span>Banjarnegara Snack Bar Energy</span></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#kalkulator">Kalkulator</a></li>
+      <li><a href="#dampak">Jejak Dampak</a></li>
+      <li><a href="#puncak">Racik Rasa</a></li>
+      <li><a href="#beli" class="btn btn-primary" style="padding:0.6em 1.3em;">Beli Sekarang</a></li>
+    </ul>
+    <button class="burger" id="burgerBtn" aria-expanded="false" aria-controls="navLinks" aria-label="Buka menu">
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="beranda">
+  <div class="hero-ridge" aria-hidden="true">
+    <svg viewBox="0 0 1440 520" preserveAspectRatio="none" style="width:100%;height:100%;">
+      <path d="M0 420 L180 300 L340 380 L520 240 L700 340 L900 200 L1100 330 L1280 260 L1440 360 L1440 520 L0 520 Z" fill="#DCEBD1"/>
+      <path d="M0 460 L220 360 L400 430 L620 300 L820 400 L1040 280 L1240 390 L1440 320 L1440 520 L0 520 Z" fill="#EAF3E2"/>
+      <ellipse cx="905" cy="196" rx="26" ry="14" fill="#F3D9C4" opacity="0.8"/>
+      <ellipse cx="930" cy="184" rx="18" ry="10" fill="#F3D9C4" opacity="0.6"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <h1>Alami, Bernutrisi,<br>Berenergi!</h1>
+        <p class="hero-sub">Camilan padat energi dari kebun-kebun dataran tinggi Banjarnegara. Bekal ringkas untuk langkahmu ke mana pun kau menuju.</p>
+        <div class="hero-actions">
+          <a href="#kalkulator" class="btn btn-primary">Hitung Kebutuhan Energimu</a>
+          <a href="#beli" class="btn btn-ghost">Beli Sekarang</a>
+        </div>
+        <div class="hero-tags">
+          <span class="tag">100% bahan endemik</span>
+          <span class="tag">Tanpa pengawet</span>
+          <span class="tag">Mitra petani lokal</span>
+        </div>
+      </div>
+      <div class="pack-stage">
+        <div class="pack-glow" aria-hidden="true"></div>
+        <div class="pack-card">
+          <img src="barenergy.png" alt="Kemasan Barenergy" style="width: 100%; height: auto; transform: rotate(8deg); filter: drop-shadow(0 25px 35px rgba(38,67,44,0.35));">
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="trail">
+  <div class="wrap">
+    <span class="trail-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20l6-14 4 8 3-6 5 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Basecamp — Kenali Bahannya
+    </span>
+  </div>
+</div>
+
+<!-- ============ TENTANG / INGREDIENTS ============ -->
+<section class="section" id="tentang">
+  <div class="ingredients">
+      <!-- 1. Mocaf -->
+      <article class="ing-card">
+        <img src="mocaf.png" alt="Mocaf" class="ing-icon" style="width: 70px; height: 70px; mix-blend-mode: multiply; object-fit: contain;">
+        <h3>Mocaf</h3>
+        <p>Tepung singkong termodifikasi sebagai basis energi, bebas gluten dan diserap bertahap.</p>
+        <span class="ing-tag">Karbohidrat lepas lambat</span>
+      </article>
+
+      <!-- 2. Kacang Merah -->
+      <article class="ing-card">
+        <img src="redbeans.png" alt="Kacang Merah" class="ing-icon" style="width: 70px; height: 70px; mix-blend-mode: multiply; object-fit: contain;">
+        <h3>Kacang Merah</h3>
+        <p>Sumber protein nabati dan zat besi dari lahan tegalan Banjarnegara.</p>
+        <span class="ing-tag">Protein &amp; zat besi</span>
+      </article>
+
+      <!-- 3. Salak -->
+      <article class="ing-card">
+        <img src="salacca.png" alt="Salak" class="ing-icon" style="width: 70px; height: 70px; mix-blend-mode: multiply; object-fit: contain;">
+        <h3>Salak</h3>
+        <p>Buah bersisik khas dataran tinggi, memberi rasa manis segar dan serat alami.</p>
+        <span class="ing-tag">Serat &amp; vitamin C</span>
+      </article>
+
+      <!-- 4. Carica -->
+      <article class="ing-card">
+        <img src="carica.png" alt="Carica" class="ing-icon" style="width: 70px; height: 70px; mix-blend-mode: multiply; object-fit: contain;">
+        <h3>Carica</h3>
+        <p>Pepaya gunung endemik Dieng, dikenal lewat aroma khas dan tekstur lembutnya.</p>
+        <span class="ing-tag">Ikonik Dieng</span>
+      </article>
+
+      <!-- 5. Gula Aren -->
+      <article class="ing-card">
+        <img src="arenpalm.png" alt="Gula Aren" class="ing-icon" style="width: 70px; height: 70px; mix-blend-mode: multiply; object-fit: contain;">
+        <h3>Gula Aren</h3>
+        <p>Pemanis alami dari nira aren, disadap oleh perajin gula lokal secara turun-temurun.</p>
+        <span class="ing-tag">Indeks glikemik lebih rendah</span>
+      </article>
+
+      <!-- 6. Purwaceng -->
+      <article class="ing-card">
+        <img src="purwaceng.png" alt="Purwaceng" class="ing-icon" style="width: 70px; height: 70px; mix-blend-mode: multiply; object-fit: contain;">
+        <h3>Purwaceng</h3>
+        <p>Herba dataran tinggi khas Dieng, ditambahkan dalam takaran kecil sebagai penambah stamina.</p>
+        <span class="ing-tag">Herba khas dataran tinggi</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="trail" style="background:var(--bg);">
+  <div class="wrap">
+    <span class="trail-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M12 11v9M8 22h8" stroke-linecap="round"/></svg>
+      Pos 1 — Smart Nutrition Engine
+    </span>
+  </div>
+</div>
+
+<!-- ============ KALKULATOR ============ -->
+<section class="section" id="kalkulator">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Smart Nutrition Engine</span>
+      <h2>Berapa bar yang kamu butuhkan?</h2>
+      <p>Masukkan berat badan, lama aktivitas, dan intensitasnya — mesin ini memperkirakan berapa Barenergy yang pas untuk mengisi ulang energimu.</p>
+    </div>
+
+    <div class="calc-layout">
+      <form class="calc-card" id="calcForm" novalidate>
+        <div class="field">
+          <label for="berat">Berat badan (kg)</label>
+          <input type="number" id="berat" name="berat" min="30" max="150" step="1" placeholder="cth. 60" required>
+        </div>
+        <div class="field">
+          <label for="durasi">Durasi aktivitas (jam)</label>
+          <input type="number" id="durasi" name="durasi" min="0.5" max="24" step="0.5" placeholder="cth. 4" required>
+        </div>
+        <div class="field">
+          <label for="aktivitas">Jenis aktivitas</label>
+          <select id="aktivitas" name="aktivitas" required>
+            <option value="ringan">Ringan — jalan santai, wisata</option>
+            <option value="sedang">Sedang — trekking, jelajah kawah</option>
+            <option value="ekstrem">Ekstrem — mendaki gunung</option>
+          </select>
+        </div>
+        <p class="field-error" id="calcError">Isi berat badan dan durasi dengan angka yang wajar dulu, ya.</p>
+        <button type="submit" class="btn btn-primary btn-block">Hitung Kebutuhanmu</button>
+        <p class="field-hint" style="margin-top:0.9rem;">Estimasi umum berbasis kebutuhan kalori aktivitas, bukan pengganti saran ahli gizi.</p>
+      </form>
+
+      <div class="calc-result" id="calcResult">
+        <span class="eyebrow">Rekomendasi</span>
+        <p class="result-empty" id="resultEmpty">Isi form di samping, hasil rekomendasi bekalmu akan muncul di sini.</p>
+        <div id="resultContent" style="display:none;">
+          <p class="result-headline">Bawa <span class="num" id="resultBars">–</span> Bar Barenergy</p>
+          <p class="result-sub" id="resultSentence"></p>
+          <div class="result-meta">
+            <div><b id="resultKcal">–</b>kkal diperkirakan terpakai</div>
+            <div><b id="resultActivity">–</b>tingkat aktivitas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trail">
+  <div class="wrap">
+    <span class="trail-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 15h6M17 14v6" stroke-linecap="round"/></svg>
+      Pos 2 — Jejak Dampak Sosial
+    </span>
+  </div>
+</div>
+
+<!-- ============ JEJAK DAMPAK / QR ============ -->
+<section class="section section-alt" id="dampak">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Transparansi Rantai Pasok</span>
+      <h2>Pindai, dan temukan asal batangmu</h2>
+      <p>Tiap bungkus Barenergy punya kode QR unik. Setelah dipindai, halaman ini otomatis mengautentikasi batch tersebut dan menunjukkan dampaknya bagi petani mitra.</p>
+    </div>
+
+    <div class="calc-card" style="max-width:640px;">
+      <p class="field-hint" style="margin-bottom:0.9rem;">Belum punya bungkusnya? Coba masukkan kode contoh secara manual.</p>
+      <div class="impact-check">
+        <input type="text" id="batchInput" placeholder="cth. BRN-024" aria-label="Masukkan kode batch">
+        <button type="button" class="btn btn-primary" id="batchBtn">Cek Autentikasi</button>
+      </div>
+      <p class="impact-hint">Kode contoh untuk dicoba: <code>BRN-024</code>, <code>BRN-031</code>, atau <code>BRN-047</code>.</p>
+    </div>
+
+    <div class="impact-panel" id="impactPanel">
+      <div class="stamp-row">
+        <div class="stamp-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <p class="stamp-title" id="impactUnknownFlag" style="display:none; color:var(--orange-deep);">Kode tidak dikenali — ini kisah dari mitra kami</p>
+          <p class="stamp-title">Autentikasi Berhasil</p>
+          <p class="stamp-code">Batch <span id="impactCode">–</span></p>
+        </div>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-stat"><b id="impactFamilies">–</b><span>Keluarga tani terlibat</span></div>
+        <div class="impact-stat"><b id="impactPremium">–</b><span>Harga di atas tengkulak</span></div>
+        <div class="impact-stat"><b id="impactLoc">–</b><span>Lokasi kebun</span></div>
+      </div>
+      <p class="impact-story" id="impactStory"></p>
+    </div>
+  </div>
+</section>
+
+<div class="trail" style="background:var(--bg);">
+  <div class="wrap">
+    <span class="trail-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l3 6 6 1-4.5 4.5L18 21l-6-3-6 3 1.5-6.5L3 10l6-1z" stroke-linejoin="round"/></svg>
+      Puncak — Racik Rasa &amp; Bawa Pulang
+    </span>
+  </div>
+</div>
+
+<!-- ============ CO-CREATION + E-COMMERCE ============ -->
+<section class="section" id="puncak">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Sampai di Puncak</span>
+      <h2>Racik rasa berikutnya bersama kami</h2>
+      <p>Barenergy tumbuh dari masukan komunitas pendaki dan wisatawan. Bagikan ide rasamu, atau langsung bawa pulang bekalmu.</p>
+    </div>
+
+    <div class="puncak-grid">
+      <div class="puncak-card">
+        <h3 style="font-size:1.3rem; margin-bottom:1.2rem;">Kirim Ide Rasa</h3>
+        <form id="ideaForm" novalidate>
+          <div class="field">
+            <label for="idNama">Nama</label>
+            <input type="text" id="idNama" name="nama" placeholder="Nama kamu" required>
+          </div>
+          <div class="field">
+            <label for="idEmail">Email</label>
+            <input type="email" id="idEmail" name="email" placeholder="nama@email.com" required>
+          </div>
+          <div class="field">
+            <label for="idPesan">Ide rasa / masukan</label>
+            <textarea id="idPesan" name="pesan" placeholder="Misalnya: varian Carica-Jahe untuk cuaca dingin di Prau…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Kirim Ide</button>
+          <p class="form-success" id="ideaSuccess">Terima kasih! Ide rasamu sudah sampai ke dapur kami.</p>
+        </form>
+      </div>
+
+      <div class="puncak-card" id="beli">
+        <h3 style="font-size:1.3rem; margin-bottom:0.4rem;">Bawa Pulang Barenergy</h3>
+        <p style="color:var(--ink-soft); font-size:0.95rem;">Pesan langsung atau lewat mitra marketplace kami.</p>
+        <div class="buy-list">
+          <a class="buy-item" href="https://wa.me/6281234567890?text=Halo%20Barenergy%2C%20saya%20ingin%20pesan" target="_blank" rel="noopener">
+            <span>Pesan via WhatsApp<small>Respons cepat, cocok untuk pesanan langsung</small></span>
+            <span aria-hidden="true">→</span>
+          </a>
+          <a class="buy-item" href="#" target="_blank" rel="noopener">
+            <span>Belanja di Marketplace<small>Tersedia di etalase mitra e-commerce kami</small></span>
+            <span aria-hidden="true">→</span>
+          </a>
+          <a class="buy-item" href="#dampak">
+            <span>Telusuri Jejak Dampak<small>Lihat asal bahan sebelum membeli</small></span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-logo">barenergy</div>
+      <p class="footer-note">Inovasi pangan fungsional berbasis ekonomi sirkular dari dataran tinggi Banjarnegara.</p>
+    </div>
+    <div class="footer-meta">
+      Purwarupa Pelita Fair Untidar 2026<br>
+      v1.0 · HTML/CSS/JS Native Edition
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- NAV ---------- */
+  var burger = document.getElementById('burgerBtn');
+  var navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', function(){
+    var open = navLinks.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  navLinks.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      navLinks.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ---------- INGREDIENT CARD REVEAL ---------- */
+  var cards = document.querySelectorAll('.ing-card');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.15 });
+    cards.forEach(function(c){ io.observe(c); });
+  } else {
+    cards.forEach(function(c){ c.classList.add('in-view'); });
+  }
+
+  /* ---------- REQ-F02: SMART NUTRITION ENGINE ---------- */
+  var calcForm = document.getElementById('calcForm');
+  var calcError = document.getElementById('calcError');
+  var resultEmpty = document.getElementById('resultEmpty');
+  var resultContent = document.getElementById('resultContent');
+  var KCAL_PER_BAR = 180; // energi per bar 40g
+  var ACTIVITY = {
+    ringan:  { label:'Ringan',  factor:2, sentence:'Cukup untuk menemani jalan santai dan wisata singkat di sekitar kawah.' },
+    sedang:  { label:'Sedang',  factor:4, sentence:'Pas untuk trekking dan jelajah kawah selama beberapa jam.' },
+    ekstrem: { label:'Ekstrem — Mendaki', factor:7, sentence:'Rekomendasi untuk pendakian yang menguras tenaga, bawa sedikit lebih untuk cadangan.' }
+  };
+
+  calcForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var berat = parseFloat(document.getElementById('berat').value);
+    var durasi = parseFloat(document.getElementById('durasi').value);
+    var aktivitasKey = document.getElementById('aktivitas').value;
+    var activity = ACTIVITY[aktivitasKey];
+
+    if(!berat || berat <= 0 || !durasi || durasi <= 0 || !activity){
+      calcError.classList.add('show');
+      resultEmpty.style.display = 'block';
+      resultContent.style.display = 'none';
+      return;
+    }
+    calcError.classList.remove('show');
+
+    var totalKcal = (berat * (1 + activity.factor)) * durasi;
+    var bars = Math.round((totalKcal / KCAL_PER_BAR) * 2) / 2;
+    if(bars < 0.5) bars = 0.5;
+
+    document.getElementById('resultBars').textContent = bars;
+    document.getElementById('resultSentence').textContent = activity.sentence;
+    document.getElementById('resultKcal').textContent = Math.round(totalKcal);
+    document.getElementById('resultActivity').textContent = activity.label;
+
+    resultEmpty.style.display = 'none';
+    resultContent.style.display = 'block';
+  });
+
+  /* ---------- REQ-F03: QR / BATCH TRACKER ---------- */
+  var impactPanel = document.getElementById('impactPanel');
+  var batchInput = document.getElementById('batchInput');
+  var batchBtn = document.getElementById('batchBtn');
+
+  var BATCH_DATA = {
+    'BRN-024': {
+      loc:'Batur, Dieng Kulon',
+      families:18,
+      premium:'20%',
+      story:'Batch ini berasal dari panen carica dan purwaceng Kelompok Tani Amerta Sikidang. Hasil panen dibeli langsung tanpa perantara, memangkas rantai distribusi yang biasa menekan harga di tingkat petani.'
+    },
+    'BRN-031': {
+      loc:'Pekasiran, Dieng',
+      families:24,
+      premium:'18%',
+      story:'Mocaf dan kacang merah pada batch ini dipasok oleh koperasi tani Pekasiran, bagian dari program rotasi tanam yang menjaga kesuburan lahan dataran tinggi.'
+    },
+    'BRN-047': {
+      loc:'Kalibening, Banjarnegara',
+      families:15,
+      premium:'22%',
+      story:'Gula aren batch ini disadap oleh perajin gula kelapa Kalibening, mitra jangka panjang Barenergy sejak purwarupa pertama diujicobakan.'
+    }
+  };
+
+  function showBatch(rawCode){
+    var code = (rawCode || '').trim().toUpperCase();
+    if(!code) return;
+    var data = BATCH_DATA[code];
+    var unknownFlag = document.getElementById('impactUnknownFlag');
+
+    if(data){
+      unknownFlag.style.display = 'none';
+      document.getElementById('impactCode').textContent = code;
+      document.getElementById('impactFamilies').textContent = data.families;
+      document.getElementById('impactPremium').textContent = data.premium;
+      document.getElementById('impactLoc').textContent = data.loc;
+      document.getElementById('impactStory').textContent = data.story;
+    } else {
+      unknownFlag.style.display = 'block';
+      document.getElementById('impactCode').textContent = code;
+      document.getElementById('impactFamilies').textContent = '15+';
+      document.getElementById('impactPremium').textContent = '~20%';
+      document.getElementById('impactLoc').textContent = 'Dataran Tinggi Banjarnegara';
+      document.getElementById('impactStory').textContent = 'Kode ini belum terdaftar di purwarupa kami, tapi setiap batang Barenergy tetap berasal dari kelompok tani mitra di dataran tinggi Banjarnegara — dibeli langsung, tanpa tengkulak.';
+    }
+    impactPanel.classList.remove('show');
+    // restart animation
+    void impactPanel.offsetWidth;
+    impactPanel.classList.add('show');
+    impactPanel.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  batchBtn.addEventListener('click', function(){ showBatch(batchInput.value); });
+  batchInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); showBatch(batchInput.value); }
+  });
+
+  // REQ-F03: auto-detect ?batch= param on load, safe if absent
+  try{
+    var params = new URLSearchParams(window.location.search);
+    var batchParam = params.get('batch');
+    if(batchParam){
+      batchInput.value = batchParam;
+      showBatch(batchParam);
+    }
+  } catch(err){
+    /* URLSearchParams unsupported or blocked — page still renders normally */
+  }
+
+  /* ---------- REQ-F04: CO-CREATION FORM ---------- */
+  var ideaForm = document.getElementById('ideaForm');
+  var ideaSuccess = document.getElementById('ideaSuccess');
+  ideaForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!ideaForm.checkValidity()){
+      ideaForm.reportValidity();
+      return;
+    }
+    ideaSuccess.classList.add('show');
+    ideaForm.reset();
+    setTimeout(function(){ ideaSuccess.classList.remove('show'); }, 6000);
+  });
+
+})();
+</script>
+</body>
+</html>
