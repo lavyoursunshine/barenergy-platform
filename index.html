@@ -183,12 +183,13 @@
     position:absolute; inset:0; z-index:0; pointer-events:none;
   }
   .hero .wrap{ position:relative; z-index:1; }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.05fr 0.95fr;
-    gap:2.5rem;
-    align-items:center;
-    padding-bottom:3rem;
+ .hero-grid {
+    display: grid;
+    /* Kita geser proporsinya: teks 40%, gambar 60% */
+    grid-template-columns: 0.8fr 1.2fr; 
+    gap: 1rem;
+    align-items: center;
+    padding-bottom: 3rem;
   }
   .hero h1{
     font-size:clamp(2.4rem, 5vw, 3.6rem);
@@ -225,20 +226,20 @@
     position:absolute; width:78%; aspect-ratio:1;
     background:radial-gradient(circle, rgba(234,106,44,0.35), transparent 70%);
     filter:blur(6px);
-  .pack-card {
-    position: relative; /* Balikin ke relative */
+.pack-card {
+    position: relative;
     width: 100%;
-    max-width: 900px;  /* Batas maksimal dinaikin drastis */
-    margin: 0 auto;
-    margin-top: 2rem;
+    /* Paksa lebar lebih dari 100% kontainernya */
+    max-width: 800px; 
+    margin-left: auto;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end; /* Tarik gambar ke kanan mentok */
     z-index: 10;
   }
 
   .pack-card img {
-    width: 120%;       /* Kita buat dia 120% lebih lebar dari kontainernya */
-    max-width: none;   /* Biar dia ngikutin lebar container, bukan batasan pixel */
+    /* Paksa ukuran jadi sangat besar */
+    width: 130%; 
     height: auto;
     filter: drop-shadow(0 35px 45px rgba(38,67,44,0.35));
   }
